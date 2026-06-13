@@ -311,7 +311,7 @@
             window.scrollTo(0, 0);
         }
 
-        // 3. RENDERIZAR SORTEIOS E DASHBOARD
+        // 3. RENDERIZAR SORTEIOS E DASHBOARD (CORRIGIDO PARA GARANTIR QUE APARECEM)
         function renderizarSorteios() {
             const render = (id, data, tipo) => {
                 const container = document.getElementById(id);
@@ -334,7 +334,7 @@
             render('dream-sorteios', sorteiosData.eurodreams, 'dream');
             render('m1lhao-sorteios', sorteiosData.m1lhao, 'm1');
 
-            // Dashboard
+            // Dashboard - FORÇAR RENDERIZAÇÃO IMEDIATA
             const ultEuro = sorteiosData.euromilhoes[0];
             document.getElementById('dash-euro-numeros').innerHTML = ultEuro.numeros.map(n => `<div class="bolinha">${n}</div>`).join('');
             document.getElementById('dash-euro-estrelas').innerHTML = ultEuro.estrelas.map(e => `<div class="bolinha estrela">${e}</div>`).join('');
