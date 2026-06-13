@@ -61,8 +61,8 @@
 
         /* Grelha Principal Dividida Corretamente */
         .main-layout-grid { display: grid; grid-template-columns: 1.3fr 1.1fr; gap: 25px; align-items: start; }
-        .panel-left { background-color: var(--bg-secondary); padding: 25px; border-radius: 12px; border: 1px solid #475569; }
-        .panel-right { background-color: var(--bg-secondary); padding: 25px; border-radius: 12px; border: 1px solid #475569; display: flex; flex-direction: column; gap: 15px; }
+        .panel-left { background-color: var(--bg-secondary); padding: 25px; border-radius: 12px; border: 1px solid #475569; width: 100%; }
+        .panel-right { background-color: var(--bg-secondary); padding: 25px; border-radius: 12px; border: 1px solid #475569; display: flex; flex-direction: column; gap: 15px; width: 100%; }
         
         /* Bolas e Elementos do Jogo */
         .ball-container { display: flex; gap: 6px; margin: 8px 0; flex-wrap: wrap; }
@@ -86,27 +86,30 @@
         .ads-banner { background: #1e293b; border: 1px dashed #475569; border-radius: 8px; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
         .game-card { background: #0f172a; padding: 15px; border-radius: 12px; margin-top: 15px; border: 1px solid #334155; }
         
-        .history-section { background-color: var(--bg-secondary); padding: 25px; border-radius: 12px; border: 1px solid #475569; margin-top: 25px; grid-column: span 2; }
+        .history-section { background-color: var(--bg-secondary); padding: 25px; border-radius: 12px; border: 1px solid #475569; margin-top: 25px; grid-column: span 2; width: 100%; }
         .history-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #334155; font-size: 13px; }
         .history-item:last-child { border-bottom: none; }
         .stats-list { list-style: none; margin-top: 10px; }
         .stats-list li { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #334155; font-size: 12px; }
         .stats-list li span:last-child { font-weight: bold; color: var(--warning); }
+
+        /* Sistema de Abas Dinâmicas */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
     </style>
 </head>
 <body>
 
     <div class="running-ai">🤖💨</div>
 
-    <!-- Menu Lateral -->
+    <!-- Menu Lateral Dinâmico -->
     <div class="sidebar">
         <div class="logo">Claudio AI</div>
         <ul class="nav-links">
-            <li class="active">❖ Início</li>
-            <li>🍀 Euromilhões</li>
-            <li>🎯 Totoloto</li>
-            <li>🌙 EuroDreams</li>
-            <li>🎫 M1lhão</li>
+            <li class="active" onclick="switchTab('inicio', this)">❖ Início</li>
+            <li onclick="switchTab('euro', this)">🍀 Euromilhões</li>
+            <li onclick="switchTab('toto', this)">🎯 Totoloto</li>
+            <li onclick="switchTab('dreams', this)">🌙 EuroDreams</li>
         </ul>
         <div class="ads-banner" style="height: 140px; margin-top: auto; background: #0f172a;">
             Anúncio Google
@@ -135,32 +138,26 @@
             <div class="mini-card"><h4>Sincronização</h4><div id="top-sync-status" class="val">Pronto</div></div>
         </div>
 
-        <!-- Grelha Principal -->
+        <!-- Grelha Principal Dividida -->
         <div class="main-layout-grid">
             
-            <!-- COLUNA ESQUERDA -->
+            <!-- COLUNA ESQUERDA (Muda conforme o clique no menu) -->
             <div class="panel-left">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                     <h3>Histórico de Monitorização</h3>
-                    <span id="sync-badge" style="font-size: 12px; color: var(--text-secondary);">Aguardando rede...</span>
+                    <span id="sync-badge" style="font-size: 12px; color: var(--text-secondary);">Sorteios Sincronizados</span>
                 </div>
                 
-                <div class="game-card">
-                    <h4 style="font-size: 13px; color: var(--accent);">Último Euromilhões Rastreado:</h4>
-                    <div class="ball-container">
-                        <div class="ball">13</div><div class="ball">21</div><div class="ball">22</div><div class="ball">28</div><div class="ball">43</div>
-                        <div class="ball star">1</div><div class="ball star">2</div>
+                <!-- ABA: INÍCIO (Mostra todos) -->
+                <div id="tab-inicio" class="tab-content active">
+                    <div class="game-card">
+                        <h4 style="font-size: 13px; color: var(--accent);">Último Euromilhões Rastreado:</h4>
+                        <div class="ball-container">
+                            <div class="ball">13</div><div class="ball">21</div><div class="ball">22</div><div class="ball">28</div><div class="ball">43</div>
+                            <div class="ball star">1</div><div class="ball star">2</div>
+                        </div>
                     </div>
-                </div>
-
-                <div class="game-card" style="margin-top: 12px;">
-                    <h4 style="font-size: 13px; color: var(--success);">Último Totoloto Rastreado:</h4>
-                    <div class="ball-container">
-                        <div class="ball">11</div><div class="ball">19</div><div class="ball">27</div><div class="ball">35</div><div class="ball">42</div>
-                        <div class="ball lucky">7</div>
-                    </div>
-                </div>
-
-                <!-- NOVO: RASTREIO DAS DUAS SEMANAS ANTERIORES -->
-                <div class="game-card" style="margin-top: 20px; background: rgba(59, 130, 246, 0.05); border-color: var(--accent);">
-                    <h3 style="font-size: 13px; color: var(--accent); margin-bottom: 8px;"><i class="fa-solid fa-history"></i> Números Extraídos das Semanas Anteriores</h3>
+                    <div class="game-card" style="margin-top: 12px;">
+                        <h4 style="font-size: 13px; color: var(--success);">Último Totoloto Rastreado:</h4>
+                        <div class="ball-container">
+                            <div class="ball">11</div><div class="ball">19</div><div class="ball">27</div><div class="ball">35</div><div class="ball">42</div>
