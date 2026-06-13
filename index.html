@@ -39,7 +39,6 @@
         .view.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Animação específica para os números gerados */
         @keyframes popIn { 
             0% { opacity: 0; transform: scale(0.5) translateY(20px); } 
             100% { opacity: 1; transform: scale(1) translateY(0); } 
@@ -107,31 +106,34 @@
     <main class="main-content">
         <div class="ad-space ad-space-mobile">Espaço para Anúncio (Topo)</div>
 
-        <!-- INÍCIO (DASHBOARD) -->
+        <!-- INÍCIO (TELA DE BOAS-VINDAS) -->
         <div id="view-inicio" class="view active">
-            <div class="header"><h1>Dashboard</h1><p style="color: var(--text-secondary);">Resumo dos últimos resultados e estatísticas.</p></div>
+            <div class="header">
+                <h1>👋 Bem-vindo ao Claudio AI Analytics</h1>
+                <p style="color: var(--text-secondary); font-size: 1.1rem;">A sua plataforma inteligente de análise e previsão de jogos.</p>
+            </div>
             
-            <!-- NOVOS RESULTADOS NO INÍCIO -->
-            <h3 style="color: var(--text-secondary); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">🏆 Últimos Resultados</h3>
+            <h3 style="color: var(--text-secondary); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #333; padding-bottom: 10px;">🏆 Últimos Resultados da Semana</h3>
+            
             <div class="grid">
                 <div class="card">
-                    <h3>Euromilhões</h3>
+                    <h3 style="color: var(--accent); text-align: center;">Euromilhões</h3>
                     <div id="dash-euro-numeros" class="balls-container" style="justify-content: center;"></div>
                     <div id="dash-euro-estrelas" class="balls-container" style="justify-content: center;"></div>
                 </div>
                 <div class="card">
-                    <h3>Totoloto</h3>
+                    <h3 style="color: var(--accent); text-align: center;">Totoloto</h3>
                     <div id="dash-toto-numeros" class="balls-container" style="justify-content: center;"></div>
                     <div id="dash-toto-estrelas" class="balls-container" style="justify-content: center;"></div>
                 </div>
                 <div class="card">
-                    <h3>EuroDreams</h3>
+                    <h3 style="color: var(--accent); text-align: center;">EuroDreams</h3>
                     <div id="dash-dream-numeros" class="balls-container" style="justify-content: center;"></div>
                     <div id="dash-dream-estrelas" class="balls-container" style="justify-content: center;"></div>
                 </div>
             </div>
 
-            <div class="grid" style="margin-top: 30px;">
+            <div class="grid" style="margin-top: 10px;">
                 <div class="card"><h3>Total de Sorteios Analisados</h3><div class="value">1.250</div></div>
                 <div class="card"><h3>Nº Mais Frequente</h3><div class="value" style="color: var(--warning);">7</div></div>
             </div>
@@ -153,7 +155,6 @@
                     <h3>Gerador de Chave IA</h3>
                     <p style="margin-bottom: 20px; color: var(--text-secondary); font-size: 0.9rem;">Baseado em tendências históricas.</p>
                     <button class="btn btn-success" onclick="gerarChave('euromilhoes')"><i class="fas fa-magic"></i> Gerar Chave Otimizada</button>
-                    <!-- Os números aparecerão AQUI EMBAIXO com animação -->
                     <div class="balls-container numeros-gerados-animacao" id="euro-numeros" style="margin-top: 25px; justify-content: center; min-height: 40px;"></div>
                     <div class="balls-container numeros-gerados-animacao" id="euro-estrelas" style="justify-content: center; min-height: 40px;"></div>
                 </div>
@@ -245,7 +246,7 @@
             return datas;
         }
 
-        // 2. DADOS COM DATAS DINÂMICAS (Sempre atualizado)
+        // 2. DADOS COM DATAS DINÂMICAS
         const sorteiosData = {
             euromilhoes: [
                 { data: getUltimas4Datas([2, 5])[0], numeros: [7, 14, 23, 31, 42], estrelas: [3, 9] },
@@ -305,7 +306,7 @@
             render('dream-sorteios', sorteiosData.eurodreams, 'dream');
             render('m1lhao-sorteios', sorteiosData.m1lhao, 'm1');
 
-            // Preencher Dashboard com o ÚLTIMO resultado
+            // Preencher Dashboard com o ÚLTIMO resultado (em bolinhas)
             const ultimoEuro = sorteiosData.euromilhoes[0];
             document.getElementById('dash-euro-numeros').innerHTML = ultimoEuro.numeros.map(n => `<div class="ball" style="width:32px;height:32px;font-size:0.9rem;">${n}</div>`).join('');
             document.getElementById('dash-euro-estrelas').innerHTML = ultimoEuro.estrelas.map(e => `<div class="ball star" style="width:32px;height:32px;font-size:0.9rem;">${e}</div>`).join('');
@@ -348,7 +349,7 @@
         setInterval(atualizarContadores, 1000);
         atualizarContadores();
 
-        // 6. GERADOR DE CHAVE COM IA E ANIMAÇÃO EM BAIXO
+        // 6. GERADOR DE CHAVE COM IA (CORRIGIDO PARA TODOS OS JOGOS)
         function gerarChave(tipo) {
             let maxNum, qtdNum, maxEst, qtdEst;
             if (tipo === 'euromilhoes') { maxNum = 50; qtdNum = 5; maxEst = 12; qtdEst = 2; }
@@ -388,7 +389,6 @@
 
             const prefix = tipo === 'euromilhoes' ? 'euro' : (tipo === 'totoloto' ? 'toto' : 'dream');
             
-            // Limpa e aplica animação
             const numContainer = document.getElementById(prefix + '-numeros');
             const estContainer = document.getElementById(prefix + '-estrelas');
             
@@ -396,8 +396,6 @@
             estContainer.innerHTML = '';
             numContainer.classList.remove('numeros-gerados-animacao');
             estContainer.classList.remove('numeros-gerados-animacao');
-            
-            // Força o reflow para reiniciar a animação
             void numContainer.offsetWidth;
             
             numContainer.innerHTML = numeros.map(n => `<div class="ball">${n}</div>`).join('');
@@ -408,23 +406,25 @@
             
             mostrarToast('🧠 Chave gerada pela IA!');
             
-            // Botão de salvar dinâmico
             setTimeout(() => {
-                let btnSalvar = document.getElementById('btn-salvar-dinamico');
-                if (!btnSalvar) {
-                    btnSalvar = document.createElement('button');
-                    btnSalvar.id = 'btn-salvar-dinamico';
-                    btnSalvar.className = 'btn';
-                    btnSalvar.style.marginTop = '15px';
-                    btnSalvar.style.backgroundColor = 'var(--bg-card)';
-                    btnSalvar.innerHTML = '<i class="fas fa-bookmark"></i> Salvar esta Chave';
-                    btnSalvar.onclick = () => salvarChaveFavorita(tipo);
-                    estContainer.parentNode.appendChild(btnSalvar);
-                }
-            }, 600); // Aparece depois que os números terminam de animar
+                const parent = estContainer.parentNode;
+                let btnSalvar = parent.querySelector('#btn-salvar-dinamico');
+                if (btnSalvar) btnSalvar.remove();
+
+                btnSalvar = document.createElement('button');
+                btnSalvar.id = 'btn-salvar-dinamico';
+                btnSalvar.className = 'btn';
+                btnSalvar.style.marginTop = '15px';
+                btnSalvar.style.backgroundColor = 'var(--bg-card)';
+                btnSalvar.innerHTML = '<i class="fas fa-bookmark"></i> Salvar esta Chave';
+                // AQUI ESTÁ A CORREÇÃO: passa o 'tipo' correto para a função de salvar
+                btnSalvar.onclick = () => salvarChaveFavorita(tipo); 
+                
+                parent.appendChild(btnSalvar);
+            }, 600);
         }
 
-        // 7. FAVORITOS E TOAST
+        // 7. FAVORITOS E TOAST (CORRIGIDO)
         function mostrarToast(mensagem) {
             const toast = document.getElementById('toast-notificacao');
             document.getElementById('toast-mensagem').innerText = mensagem;
@@ -434,12 +434,20 @@
 
         function salvarChaveFavorita(tipo) {
             const prefix = tipo === 'euromilhoes' ? 'euro' : (tipo === 'totoloto' ? 'toto' : 'dream');
-            let nums = Array.from(document.getElementById(prefix + '-numeros').children).map(el => el.innerText);
-            let ests = Array.from(document.getElementById(prefix + '-estrelas').children).map(el => el.innerText);
-            let favoritos = JSON.parse(localStorage.getItem('claudioAI_favoritos')) || [];
+            const numContainer = document.getElementById(prefix + '-numeros');
+            const estContainer = document.getElementById(prefix + '-estrelas');
             
-            favoritos.unshift({ jogo: tipo, numeros: nums, estrelas: ests, data: new Date().toLocaleDateString('pt-PT') });
+            if (!numContainer) return;
+
+            let nums = Array.from(numContainer.children).map(el => el.innerText);
+            let ests = Array.from(estContainer.children).map(el => el.innerText);
+            
+            let nomeJogo = tipo === 'euromilhoes' ? 'Euromilhões' : (tipo === 'totoloto' ? 'Totoloto' : 'EuroDreams');
+
+            let favoritos = JSON.parse(localStorage.getItem('claudioAI_favoritos')) || [];
+            favoritos.unshift({ jogo: nomeJogo, numeros: nums, estrelas: ests, data: new Date().toLocaleDateString('pt-PT') });
             localStorage.setItem('claudioAI_favoritos', JSON.stringify(favoritos));
+            
             mostrarToast('✅ Chave salva nos favoritos!');
             renderizarFavoritos();
         }
@@ -453,7 +461,7 @@
             }
             container.innerHTML = favoritos.map((f, index) => `
                 <div class="sorteio-card">
-                    <h4>${f.jogo.toUpperCase()} <small>(${f.data})</small></h4>
+                    <h4>${f.jogo} <small>(${f.data})</small></h4>
                     <div class="balls-container" style="margin: 10px 0;">${f.numeros.map(n => `<div class="ball" style="width:30px;height:30px;font-size:0.9rem;">${n}</div>`).join('')}</div>
                     ${f.estrelas.length > 0 ? `<div class="balls-container">${f.estrelas.map(e => `<div class="ball star" style="width:30px;height:30px;font-size:0.9rem;">${e}</div>`).join('')}</div>` : ''}
                     <button class="btn" style="background-color: #ef4444; margin-top: 10px; padding: 8px;" onclick="removerFavorito(${index})">Remover</button>
