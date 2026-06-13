@@ -22,15 +22,35 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background-color: var(--bg-primary); color: var(--text-primary); display: flex; min-height: 100vh; }
+        body { background-color: var(--bg-primary); color: var(--text-primary); display: flex; min-height: 100vh; position: relative; overflow-x: hidden; }
         
+        /* ROBÔ DE IA ANIMADO CORRIGIDO */
+        .running-ai {
+            position: fixed;
+            bottom: 10px;
+            font-size: 20px;
+            white-space: nowrap;
+            z-index: 9999;
+            animation: aiRun 14s linear infinite;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        @keyframes aiRun {
+            0% { left: -50px; transform: scaleX(1); }
+            49% { transform: scaleX(1); }
+            50% { left: calc(100vw - 40px); transform: scaleX(-1); }
+            99% { transform: scaleX(-1); }
+            100% { left: -50px; transform: scaleX(1); }
+        }
+
         .sidebar { width: var(--sidebar-width); background-color: var(--bg-secondary); padding: 20px; display: flex; flex-direction: column; gap: 12px; position: fixed; height: 100vh; }
         .logo { font-size: 24px; font-weight: bold; color: var(--accent); display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
         .nav-links { list-style: none; display: flex; flex-direction: column; gap: 6px; }
         .nav-links li { padding: 10px 14px; border-radius: 8px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 12px; color: var(--text-secondary); font-size: 14px; }
         .nav-links li:hover, .nav-links li.active { background-color: var(--accent); color: white; }
         
-        .main-content { margin-left: var(--sidebar-width); flex: 1; padding: 30px; }
+        .main-content { margin-left: var(--sidebar-width); flex: 1; padding: 30px; padding-bottom: 80px; }
         .header { margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
         
         .euromilhoes-grid { display: grid; grid-template-columns: 1.3fr 1.2fr; gap: 25px; margin-top: 15px; }
@@ -59,20 +79,27 @@
         .ads-banner { background: #1e293b; border: 1px dashed #475569; border-radius: 8px; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
         .game-card { background: #0f172a; padding: 15px; border-radius: 12px; margin-top: 15px; border: 1px solid #334155; }
         
-        /* NOVO: Estilos do Histórico Pessoal */
         .history-section { background-color: var(--bg-secondary); padding: 25px; border-radius: 12px; border: 1px solid #475569; margin-top: 25px; }
         .history-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #334155; font-size: 13px; }
         .history-item:last-child { border-bottom: none; }
+
+        /* LISTA DE ESTATÍSTICAS */
+        .stats-list { list-style: none; margin-top: 10px; }
+        .stats-list li { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #334155; font-size: 12px; }
+        .stats-list li span:last-child { font-weight: bold; color: var(--warning); }
     </style>
 </head>
 <body>
 
-    <!-- Menu Lateral Clássico Completo -->
+    <!-- Pequeno Robô de IA a correr pelo fundo do ecrã -->
+    <div class="running-ai">🤖💨</div>
+
+    <!-- Menu Lateral -->
     <div class="sidebar">
         <div class="logo"><i class="fa-solid fa-brain"></i> Claudio AI</div>
         <ul class="nav-links">
-            <li><i class="fa-solid fa-chart-pie"></i> Início</li>
-            <li class="active"><i class="fa-solid fa-clover"></i> Euromilhões</li>
+            <li class="active"><i class="fa-solid fa-chart-pie"></i> Início</li>
+            <li><i class="fa-solid fa-clover"></i> Euromilhões</li>
             <li><i class="fa-solid fa-circle-dot"></i> Totoloto</li>
             <li><i class="fa-solid fa-moon"></i> EuroDreams</li>
             <li><i class="fa-solid fa-money-bill-wave"></i> M1lhão</li>
@@ -99,7 +126,7 @@
 
         <div class="euromilhoes-grid">
             
-            <!-- PAINEL ESQUERDO: Histórico e Gráfico -->
+            <!-- PAINEL ESQUERDO -->
             <div class="panel-left">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <h3>Histórico de Monitorização</h3>
@@ -125,18 +152,3 @@
                 <div class="ads-banner" style="height: 75px; margin-top: 25px; background: #0f172a;">
                     <i class="fa-solid fa-rectangle-ad" style="margin-right:8px;"></i> Publicidade Inteligente Google
                 </div>
-            </div>
-
-            <!-- PAINEL DIREITO: Gerador dos 4 Jogos -->
-            <div class="side-panel">
-                <h3>Gerador Inteligente IA</h3>
-                <p style="font-size: 13px; color: var(--text-secondary);">Gere os seus palpites. Os resultados ficam guardados no histórico abaixo.</p>
-                
-                <button class="btn btn-free" onclick="generarChavesMistas()"><i class="fa-solid fa-clover"></i> Gerar Chave Sem Custos</button>
-                
-                <div id="container-resultados-ia" style="display: flex; flex-direction: column; gap: 10px; margin-top: 5px;"></div>
-
-                <div class="premium-locked-box" id="paywall-box">
-                    <i class="fa-solid fa-lock"></i>
-                    <h4 style="font-size: 14px;">Desbloquear os 4 Jogos Completos</h4>
-                    <p style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Receba de imediato as chaves inteligentes do Totoloto, EuroDreams e M1lhão.</p>
