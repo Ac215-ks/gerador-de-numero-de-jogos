@@ -1,284 +1,199 @@
-<script>
-    // 1. DATAS DINÂMICAS DA SEMANA PASSADA
-    function getUltimas4Datas(diasSemana) {
-        let datas = [];
-        let dataAtual = new Date();
-        while (datas.length < 4) {
-            if (diasSemana.includes(dataAtual.getDay())) {
-                datas.push(dataAtual.toLocaleDateString('pt-PT', { weekday: 'short', day: '2-digit', month: '2-digit' }));
-            }
-            dataAtual.setDate(dataAtual.getDate() - 1);
-        }
-        return datas;
-    }
-
-    // 2. DADOS DOS SORTEIOS (Simulação de API)
-    const sorteiosData = {
-        euromilhoes: [
-            { data: getUltimas4Datas([2, 5])[0], numeros: [7, 14, 23, 31, 42], estrelas: [3, 9] },
-            { data: getUltimas4Datas([2, 5])[1], numeros: [5, 18, 27, 33, 48], estrelas: [2, 11] },
-            { data: getUltimas4Datas([2, 5])[2], numeros: [12, 19, 25, 36, 44], estrelas: [5, 8] },
-            { data: getUltimas4Datas([2, 5])[3], numeros: [3, 16, 29, 38, 47], estrelas: [1, 12] }
-        ],
-        totoloto: [
-            { data: getUltimas4Datas([3, 6])[0], numeros: [5, 12, 28, 33, 41], estrela: 7 },
-            { data: getUltimas4Datas([3, 6])[1], numeros: [8, 15, 22, 37, 45], estrela: 3 },
-            { data: getUltimas4Datas([3, 6])[2], numeros: [11, 19, 26, 34, 49], estrela: 11 },
-            { data: getUltimas4Datas([3, 6])[3], numeros: [2, 14, 23, 39, 46], estrela: 5 }
-        ],
-        eurodreams: [
-            { data: getUltimas4Datas([1, 4])[0], numeros: [8, 15, 22, 29, 35, 40], sonho: 3 },
-            { data: getUltimas4Datas([1, 4])[1], numeros: [4, 12, 18, 27, 33, 38], sonho: 1 },
-            { data: getUltimas4Datas([1, 4])[2], numeros: [6, 14, 21, 28, 36, 41], sonho: 5 },
-            { data: getUltimas4Datas([1, 4])[3], numeros: [9, 17, 24, 31, 37, 39], sonho: 2 }
-        ],
-        m1lhao: [
-            { data: getUltimas4Datas([1, 3, 6])[0], codigo: 'XYZ1234' },
-            { data: getUltimas4Datas([1, 3, 6])[1], codigo: 'ABC5678' },
-            { data: getUltimas4Datas([1, 3, 6])[2], codigo: 'DEF9012' },
-            { data: getUltimas4Datas([1, 3, 6])[3], codigo: 'GHI3456' }
-        ]
-    };
-
-    // 3. NAVEGAÇÃO
-    function showView(viewId) {
-        document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.nav-links a').forEach(el => el.classList.remove('active'));
-        document.getElementById('view-' + viewId).classList.add('active');
-        document.getElementById('nav-' + viewId).classList.add('active');
-        window.scrollTo(0, 0);
-    }
-
-    // 4. FUNÇÃO PARA RENDERIZAR BOLINHAS NO DASHBOARD (CORRIGIDA)
-    function atualizarResultadosDashboard() {
-        // USAR getElementById PARA CADA CONTAINER ESPECÍFICO
-        const euroNum = document.getElementById("dash-euro-numeros");
-        const euroEst = document.getElementById("dash-euro-estrelas");
-        const totoNum = document.getElementById("dash-toto-numeros");
-        const totoEst = document.getElementById("dash-toto-estrelas");
-        const dreamNum = document.getElementById("dash-dream-numeros");
-        const dreamEst = document.getElementById("dash-dream-estrelas");
-
-        // Preencher Euromilhões
-        if (euroNum && euroEst) {
-            const ultEuro = sorteiosData.euromilhoes[0];
-            let htmlEuroNum = '';
-            ultEuro.numeros.forEach(num => {
-                htmlEuroNum += `<div class="bolinha">${num}</div>`;
-            });
-            euroNum.innerHTML = htmlEuroNum;
-
-            let htmlEuroEst = '';
-            ultEuro.estrelas.forEach(est => {
-                htmlEuroEst += `<div class="bolinha estrela">${est}</div>`;
-            });
-            euroEst.innerHTML = htmlEuroEst;
-        }
-
-        // Preencher Totoloto
-        if (totoNum && totoEst) {
-            const ultToto = sorteiosData.totoloto[0];
-            let htmlTotoNum = '';
-            ultToto.numeros.forEach(num => {
-                htmlTotoNum += `<div class="bolinha">${num}</div>`;
-            });
-            totoNum.innerHTML = htmlTotoNum;
-            totoEst.innerHTML = `<div class="bolinha estrela">${ultToto.estrela}</div>`;
-        }
-
-        // Preencher EuroDreams
-        if (dreamNum && dreamEst) {
-            const ultDream = sorteiosData.eurodreams[0];
-            let htmlDreamNum = '';
-            ultDream.numeros.forEach(num => {
-                htmlDreamNum += `<div class="bolinha">${num}</div>`;
-            });
-            dreamNum.innerHTML = htmlDreamNum;
-            dreamEst.innerHTML = `<div class="bolinha estrela">${ultDream.sonho}</div>`;
-        }
-    }
-
-    // 5. RENDERIZAR HISTÓRICO DE SORTEIOS
-    function renderizarSorteios() {
-        const render = (id, data, tipo) => {
-            const container = document.getElementById(id);
-            if (!container) return;
-            container.innerHTML = data.map(s => {
-                let extra = '';
-                if (tipo === 'euro') extra = `<div class="contentor-bolinhas">${s.estrelas.map(e => `<div class="bolinha estrela">${e}</div>`).join('')}</div>`;
-                else if (tipo === 'toto') extra = `<div class="contentor-bolinhas"><div class="bolinha estrela" title="Número da Sorte">${s.estrela}</div></div>`;
-                else if (tipo === 'dream') extra = `<div class="contentor-bolinhas"><div class="bolinha estrela" title="Número Sonho">${s.sonho}</div></div>`;
-                else if (tipo === 'm1') extra = `<div style="font-size: 2rem; font-weight: bold; color: var(--accent); letter-spacing: 3px; margin: 15px 0; text-align:center;">${s.codigo}</div>`;
-                
-                return `<div class="sorteio-card"><h4>Sorteio de ${s.data}</h4>
-                    <div class="contentor-bolinhas" style="margin: 10px 0;">${s.numeros.map(n => `<div class="bolinha">${n}</div>`).join('')}</div>
-                    ${extra}</div>`;
-            }).join('');
-        };
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claudio AI Analytics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+        body { background-color: #f4f6f9; color: #333333; padding: 20px; }
         
-        render('euro-sorteios', sorteiosData.euromilhoes, 'euro');
-        render('toto-sorteios', sorteiosData.totoloto, 'toto');
-        render('dream-sorteios', sorteiosData.eurodreams, 'dream');
-        render('m1lhao-sorteios', sorteiosData.m1lhao, 'm1');
-    }
-
-    // 6. CONTADOR REGRESSIVO
-    function atualizarContadores() {
-        const agora = new Date();
-        const jogos = {
-            'euromilhoes': { dias: [2, 5], hora: 20, min: 0 },
-            'totoloto': { dias: [3, 6], hora: 20, min: 0 },
-            'eurodreams': { dias: [1, 4], hora: 21, min: 0 },
-            'm1lhao': { dias: [1, 3, 6], hora: 21, min: 0 }
-        };
-        for (const [jogo, config] of Object.entries(jogos)) {
-            let proximo = new Date(agora);
-            proximo.setHours(config.hora, config.min, 0, 0);
-            for (let i = 0; i < 8; i++) {
-                if (config.dias.includes(proximo.getDay()) && proximo > agora) break;
-                proximo.setDate(proximo.getDate() + 1);
-            }
-            const diff = proximo - agora;
-            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const s = Math.floor((diff % (1000 * 60)) / 1000);
-            const el = document.getElementById(`countdown-${jogo}`);
-            if (el) el.innerText = `${d}d ${h}h ${m}m ${s}s`;
-        }
-    }
-    setInterval(atualizarContadores, 1000);
-    atualizarContadores();
-
-    // 7. GERADOR DE CHAVE COM IA E ANIMAÇÃO
-    function gerarChave(tipo) {
-        const prefix = tipo === 'euromilhoes' ? 'euro' : (tipo === 'totoloto' ? 'toto' : 'dream');
-        const numContainer = document.getElementById(prefix + '-numeros');
-        const estContainer = document.getElementById(prefix + '-estrelas');
+        .sidebar { width: 220px; background-color: #ffffff; padding: 20px; position: fixed; height: 100vh; border-right: 1px solid #e5e7eb; }
+        .logo { font-size: 1.3rem; font-weight: bold; color: #1e3a8a; margin-bottom: 30px; }
+        .nav-links { list-style: none; }
+        .nav-links li { margin-bottom: 8px; }
+        .nav-links a { display: block; padding: 10px 15px; color: #6b7280; text-decoration: none; border-radius: 6px; cursor: pointer; }
+        .nav-links a:hover, .nav-links a.active { background-color: #1e3a8a; color: white; }
         
-        numContainer.innerHTML = '<div class="ai-loading"><div class="spinner"></div> A IA está a analisar padrões...</div>';
-        estContainer.innerHTML = '';
-        const oldBtn = document.getElementById('btn-salvar-dinamico');
-        if(oldBtn) oldBtn.remove();
+        .main-content { margin-left: 240px; padding: 20px; }
+        
+        .view { display: none; }
+        .view.active { display: block; }
+        
+        h1 { color: #1e3a8a; margin-bottom: 20px; }
+        h2 { color: #1e3a8a; text-align: center; margin: 30px 0; }
+        
+        .dashboard { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin-bottom: 30px; }
+        
+        .card-jogo { background-color: #ffffff; border-radius: 12px; padding: 25px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); flex: 1; min-width: 280px; max-width: 350px; text-align: center; border-top: 4px solid #1e3a8a; }
+        .card-jogo h3 { color: #1e3a8a; font-size: 1.3rem; margin-bottom: 20px; }
+        
+        .contentor-bolinhas { display: flex; justify-content: center; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
+        
+        .bolinha { width: 38px; height: 38px; background-color: #facc15; color: #000; font-weight: bold; font-size: 1rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 -3px 5px rgba(0,0,0,0.15), 0 2px 4px rgba(0,0,0,0.1); }
+        .bolinha.estrela { background-color: #ef4444; color: #fff; }
+        
+        .btn { background-color: #1e3a8a; color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600; width: 100%; margin-top: 15px; }
+        .btn:hover { background-color: #1e40af; }
+        .btn-success { background-color: #10b981; }
+        
+        .anuncio-flutuante { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 728px; height: 90px; background-color: #ffffff; border: 2px dashed #9ca3af; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 14px; color: #6b7280; font-weight: bold; box-shadow: 0 -4px 15px rgba(0,0,0,0.1); z-index: 1000; }
+        
+        @media (max-width: 768px) {
+            .sidebar { width: 100%; height: auto; position: relative; }
+            .main-content { margin-left: 0; }
+            .dashboard { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
 
-        setTimeout(() => {
+    <aside class="sidebar">
+        <div class="logo"><i class="fas fa-brain"></i> Claudio AI</div>
+        <ul class="nav-links">
+            <li><a onclick="showView('inicio')" class="active">🏠 Início</a></li>
+            <li><a onclick="showView('euromilhoes')">🎲 Euromilhões</a></li>
+            <li><a onclick="showView('totoloto')">🎲 Totoloto</a></li>
+            <li><a onclick="showView('eurodreams')">🎲 EuroDreams</a></li>
+            <li><a onclick="showView('m1lhao')">🎲 M1lhão</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        
+        <!-- INÍCIO -->
+        <div id="view-inicio" class="view active">
+            <h1>👋 Bem-vindo ao Claudio AI Analytics</h1>
+            <p style="color: #6b7280; text-align: center; margin-bottom: 20px;">A sua plataforma inteligente de análise de jogos.</p>
+            
+            <h2>🏆 Últimos Resultados da Semana</h2>
+
+            <div class="dashboard">
+                <div class="card-jogo">
+                    <h3>Euromilhões</h3>
+                    <div class="contentor-bolinhas" id="dash-euro-numeros"></div>
+                    <div class="contentor-bolinhas" id="dash-euro-estrelas"></div>
+                </div>
+                <div class="card-jogo">
+                    <h3>Totoloto</h3>
+                    <div class="contentor-bolinhas" id="dash-toto-numeros"></div>
+                    <div class="contentor-bolinhas" id="dash-toto-estrelas"></div>
+                </div>
+                <div class="card-jogo">
+                    <h3>EuroDreams</h3>
+                    <div class="contentor-bolinhas" id="dash-dream-numeros"></div>
+                    <div class="contentor-bolinhas" id="dash-dream-estrelas"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EUROMILHÕES -->
+        <div id="view-euromilhoes" class="view">
+            <h1>Euromilhões</h1>
+            <div class="card-jogo" style="max-width: 600px; margin: 0 auto;">
+                <h3>Gerar Chave com IA</h3>
+                <button class="btn btn-success" onclick="gerarChave('euromilhoes')">🎲 Gerar Chave</button>
+                <div class="contentor-bolinhas" id="euro-numeros" style="margin-top: 20px;"></div>
+                <div class="contentor-bolinhas" id="euro-estrelas"></div>
+            </div>
+        </div>
+
+        <!-- TOTOLOTO -->
+        <div id="view-totoloto" class="view">
+            <h1>Totoloto</h1>
+            <div class="card-jogo" style="max-width: 600px; margin: 0 auto;">
+                <h3>Gerar Chave com IA</h3>
+                <button class="btn btn-success" onclick="gerarChave('totoloto')">🎲 Gerar Chave</button>
+                <div class="contentor-bolinhas" id="toto-numeros" style="margin-top: 20px;"></div>
+                <div class="contentor-bolinhas" id="toto-estrelas"></div>
+            </div>
+        </div>
+
+        <!-- EURODREAMS -->
+        <div id="view-eurodreams" class="view">
+            <h1>EuroDreams</h1>
+            <div class="card-jogo" style="max-width: 600px; margin: 0 auto;">
+                <h3>Gerar Chave com IA</h3>
+                <button class="btn btn-success" onclick="gerarChave('eurodreams')">🎲 Gerar Chave</button>
+                <div class="contentor-bolinhas" id="dream-numeros" style="margin-top: 20px;"></div>
+                <div class="contentor-bolinhas" id="dream-estrelas"></div>
+            </div>
+        </div>
+
+        <!-- M1LHÃO -->
+        <div id="view-m1lhao" class="view">
+            <h1>M1lhão</h1>
+            <div class="card-jogo" style="max-width: 600px; margin: 0 auto;">
+                <h3>Código do Sorteio</h3>
+                <div style="font-size: 2rem; font-weight: bold; color: #1e3a8a; letter-spacing: 5px; margin: 20px 0;">XYZ1234</div>
+            </div>
+        </div>
+
+    </main>
+
+    <div class="anuncio-flutuante">📢 Espaço para Anúncio Publicitário</div>
+
+    <script>
+        // Dados dos sorteios
+        const dados = {
+            euromilhoes: { numeros: [14, 25, 31, 39, 46], estrelas: [3, 8] },
+            totoloto: { numeros: [5, 12, 19, 27, 44], numeroSorte: 7 },
+            eurodreams: { numeros: [2, 11, 18, 23, 35, 40], sonho: 4 }
+        };
+
+        // Navegação
+        function showView(viewId) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById('view-' + viewId).classList.add('active');
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Renderizar bolinhas no dashboard
+        function renderizarDashboard() {
+            // Euromilhões
+            document.getElementById('dash-euro-numeros').innerHTML = dados.euromilhoes.numeros.map(n => '<div class="bolinha">' + n + '</div>').join('');
+            document.getElementById('dash-euro-estrelas').innerHTML = dados.euromilhoes.estrelas.map(e => '<div class="bolinha estrela">' + e + '</div>').join('');
+            
+            // Totoloto
+            document.getElementById('dash-toto-numeros').innerHTML = dados.totoloto.numeros.map(n => '<div class="bolinha">' + n + '</div>').join('');
+            document.getElementById('dash-toto-estrelas').innerHTML = '<div class="bolinha estrela">' + dados.totoloto.numeroSorte + '</div>';
+            
+            // EuroDreams
+            document.getElementById('dash-dream-numeros').innerHTML = dados.eurodreams.numeros.map(n => '<div class="bolinha">' + n + '</div>').join('');
+            document.getElementById('dash-dream-estrelas').innerHTML = '<div class="bolinha estrela">' + dados.eurodreams.sonho + '</div>';
+        }
+
+        // Gerar chave
+        function gerarChave(tipo) {
+            let nums = [], ests = [];
             let maxNum, qtdNum, maxEst, qtdEst;
+            
             if (tipo === 'euromilhoes') { maxNum = 50; qtdNum = 5; maxEst = 12; qtdEst = 2; }
             else if (tipo === 'totoloto') { maxNum = 49; qtdNum = 5; maxEst = 13; qtdEst = 1; }
             else if (tipo === 'eurodreams') { maxNum = 40; qtdNum = 6; maxEst = 5; qtdEst = 1; }
-
-            let historico = sorteiosData[tipo];
-            let freqNum = {}, freqEst = {};
-            historico.forEach(s => {
-                s.numeros.forEach(n => freqNum[n] = (freqNum[n] || 0) + 1);
-                if (tipo === 'euromilhoes') s.estrelas.forEach(e => freqEst[e] = (freqEst[e] || 0) + 1);
-                else if (tipo === 'totoloto') freqEst[s.estrela] = (freqEst[s.estrela] || 0) + 1;
-                else if (tipo === 'eurodreams') freqEst[s.sonho] = (freqEst[s.sonho] || 0) + 1;
-            });
-
-            let poolNum = [], poolEst = [];
-            for (let i = 1; i <= maxNum; i++) {
-                let peso = freqNum[i] ? (freqNum[i] * 3) : 1;
-                for (let p = 0; p < peso; p++) poolNum.push(i);
-            }
-            for (let i = 1; i <= maxEst; i++) {
-                let peso = freqEst[i] ? (freqEst[i] * 3) : 1;
-                for (let p = 0; p < peso; p++) poolEst.push(i);
-            }
-
-            let numeros = [], estrelas = [];
-            while (numeros.length < qtdNum) {
-                let n = poolNum[Math.floor(Math.random() * poolNum.length)];
-                if (!numeros.includes(n)) numeros.push(n);
-            }
-            while (estrelas.length < qtdEst) {
-                let e = poolEst[Math.floor(Math.random() * poolEst.length)];
-                if (!estrelas.includes(e)) estrelas.push(e);
-            }
-            numeros.sort((a, b) => a - b);
-            estrelas.sort((a, b) => a - b);
-
-            numContainer.innerHTML = numeros.map(n => `<div class="bolinha">${n}</div>`).join('');
-            estContainer.innerHTML = estrelas.map(e => `<div class="bolinha estrela">${e}</div>`).join('');
-            numContainer.classList.add('numeros-gerados-animacao');
-            estContainer.classList.add('numeros-gerados-animacao');
-
-            const btnSalvar = document.createElement('button');
-            btnSalvar.id = 'btn-salvar-dinamico';
-            btnSalvar.className = 'btn';
-            btnSalvar.style.marginTop = '20px';
-            btnSalvar.style.backgroundColor = 'var(--bg-card)';
-            btnSalvar.style.color = 'var(--text-primary)';
-            btnSalvar.style.border = '1px solid #e5e7eb';
-            btnSalvar.innerHTML = '<i class="fas fa-bookmark"></i> Salvar esta Chave';
-            btnSalvar.onclick = () => salvarChaveFavorita(tipo);
             
-            estContainer.parentNode.appendChild(btnSalvar);
-            mostrarToast('🧠 Chave otimizada pela IA com sucesso!');
-        }, 1500);
-    }
-
-    // 8. FAVORITOS E TOAST
-    function mostrarToast(mensagem) {
-        const toast = document.getElementById('toast-notificacao');
-        document.getElementById('toast-mensagem').innerText = mensagem;
-        toast.style.display = 'flex';
-        setTimeout(() => { toast.style.display = 'none'; }, 3000);
-    }
-
-    function salvarChaveFavorita(tipo) {
-        const prefix = tipo === 'euromilhoes' ? 'euro' : (tipo === 'totoloto' ? 'toto' : 'dream');
-        const numContainer = document.getElementById(prefix + '-numeros');
-        const estContainer = document.getElementById(prefix + '-estrelas');
-        if (!numContainer) return;
-
-        let nums = Array.from(numContainer.children).map(el => el.innerText);
-        let ests = Array.from(estContainer.children).map(el => el.innerText);
-        let nomeJogo = tipo === 'euromilhoes' ? 'Euromilhões' : (tipo === 'totoloto' ? 'Totoloto' : 'EuroDreams');
-
-        let favoritos = JSON.parse(localStorage.getItem('claudioAI_favoritos')) || [];
-        favoritos.unshift({ jogo: nomeJogo, numeros: nums, estrelas: ests, data: new Date().toLocaleDateString('pt-PT') });
-        localStorage.setItem('claudioAI_favoritos', JSON.stringify(favoritos));
-        
-        mostrarToast('✅ Chave salva nos favoritos!');
-        renderizarFavoritos();
-    }
-
-    function renderizarFavoritos() {
-        const container = document.getElementById('lista-favoritos');
-        let favoritos = JSON.parse(localStorage.getItem('claudioAI_favoritos')) || [];
-        if (favoritos.length === 0) {
-            container.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 20px;">Nenhuma chave salva.</p>';
-            return;
+            while (nums.length < qtdNum) {
+                let n = Math.floor(Math.random() * maxNum) + 1;
+                if (!nums.includes(n)) nums.push(n);
+            }
+            nums.sort((a, b) => a - b);
+            
+            while (ests.length < qtdEst) {
+                let e = Math.floor(Math.random() * maxEst) + 1;
+                if (!ests.includes(e)) ests.push(e);
+            }
+            ests.sort((a, b) => a - b);
+            
+            let prefix = tipo === 'euromilhoes' ? 'euro' : (tipo === 'totoloto' ? 'toto' : 'dream');
+            document.getElementById(prefix + '-numeros').innerHTML = nums.map(n => '<div class="bolinha">' + n + '</div>').join('');
+            document.getElementById(prefix + '-estrelas').innerHTML = ests.map(e => '<div class="bolinha estrela">' + e + '</div>').join('');
         }
-        container.innerHTML = favoritos.map((f, index) => `
-            <div class="sorteio-card">
-                <h4>${f.jogo} <small style="color: var(--text-secondary);">(${f.data})</small></h4>
-                <div class="contentor-bolinhas" style="margin: 10px 0;">${f.numeros.map(n => `<div class="bolinha" style="width:30px;height:30px;font-size:0.9rem;">${n}</div>`).join('')}</div>
-                ${f.estrelas.length > 0 ? `<div class="contentor-bolinhas">${f.estrelas.map(e => `<div class="bolinha estrela" style="width:30px;height:30px;font-size:0.9rem;">${e}</div>`).join('')}</div>` : ''}
-                <button class="btn" style="background-color: #ef4444; margin-top: 10px; padding: 8px;" onclick="removerFavorito(${index})">Remover</button>
-            </div>`).join('');
-    }
 
-    function removerFavorito(index) {
-        let favoritos = JSON.parse(localStorage.getItem('claudioAI_favoritos')) || [];
-        favoritos.splice(index, 1);
-        localStorage.setItem('claudioAI_favoritos', JSON.stringify(favoritos));
-        renderizarFavoritos();
-    }
-
-    function limparFavoritos() {
-        if(confirm('Apagar todas as chaves salvas?')) {
-            localStorage.removeItem('claudioAI_favoritos');
-            renderizarFavoritos();
-            mostrarToast('🗑️ Favoritos limpos.');
-        }
-    }
-
-    // 9. INICIALIZAÇÃO - CHAMA AS FUNÇÕES AO CARREGAR A PÁGINA
-    document.addEventListener('DOMContentLoaded', function() {
-        atualizarResultadosDashboard(); // ✅ Renderiza as bolinhas no dashboard
-        renderizarSorteios();           // ✅ Renderiza o histórico de sorteios
-        renderizarFavoritos();          // ✅ Renderiza os favoritos salvos
-    });
-</script>
+        // Iniciar
+        renderizarDashboard();
+    </script>
+</body>
+</html>
