@@ -59,14 +59,14 @@
         .mini-card h4 { font-size: 11px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 5px; }
         .mini-card .val { font-size: 18px; font-weight: bold; color: var(--accent); }
 
-        /* Grelha Principal Dividida */
-        .main-layout-grid { display: grid; grid-template-columns: 1.3fr 1.1fr; gap: 25px; }
+        /* Grelha Principal Dividida Corretamente */
+        .main-layout-grid { display: grid; grid-template-columns: 1.3fr 1.1fr; gap: 25px; align-items: start; }
         .panel-left { background-color: var(--bg-secondary); padding: 25px; border-radius: 12px; border: 1px solid #475569; }
         .panel-right { background-color: var(--bg-secondary); padding: 25px; border-radius: 12px; border: 1px solid #475569; display: flex; flex-direction: column; gap: 15px; }
         
         /* Bolas e Elementos do Jogo */
         .ball-container { display: flex; gap: 6px; margin: 8px 0; flex-wrap: wrap; }
-        .ball { background: #334155; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; border: 2px solid #475569; font-size: 13px; }
+        .ball { background: #334155; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; border: 2px solid #475569; font-size: 12px; }
         .star { background: #eab308 !important; color: #0f172a !important; border-color: #ca8a04 !important; }
         .lucky { background: #ef4444 !important; color: white !important; border-color: #b91c1c !important; }
         .dream { background: #3b82f6 !important; color: white !important; border-color: #1d4ed8 !important; }
@@ -86,7 +86,7 @@
         .ads-banner { background: #1e293b; border: 1px dashed #475569; border-radius: 8px; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
         .game-card { background: #0f172a; padding: 15px; border-radius: 12px; margin-top: 15px; border: 1px solid #334155; }
         
-        .history-section { background-color: var(--bg-secondary); padding: 25px; border-radius: 12px; border: 1px solid #475569; margin-top: 25px; }
+        .history-section { background-color: var(--bg-secondary); padding: 25px; border-radius: 12px; border: 1px solid #475569; margin-top: 25px; grid-column: span 2; }
         .history-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #334155; font-size: 13px; }
         .history-item:last-child { border-bottom: none; }
         .stats-list { list-style: none; margin-top: 10px; }
@@ -98,20 +98,22 @@
 
     <div class="running-ai">🤖💨</div>
 
+    <!-- Menu Lateral -->
     <div class="sidebar">
         <div class="logo">Claudio AI</div>
         <ul class="nav-links">
-            <li class="active">[-] Início</li>
-            <li>[o] Euromilhões</li>
-            <li>[o] Totoloto</li>
-            <li>[o] EuroDreams</li>
-            <li>[o] M1lhão</li>
+            <li class="active">❖ Início</li>
+            <li>🍀 Euromilhões</li>
+            <li>🎯 Totoloto</li>
+            <li>🌙 EuroDreams</li>
+            <li>🎫 M1lhão</li>
         </ul>
         <div class="ads-banner" style="height: 140px; margin-top: auto; background: #0f172a;">
             Anúncio Google
         </div>
     </div>
 
+    <!-- Conteúdo Principal -->
     <div class="main-content">
         <div class="ads-banner" style="height: 60px; margin-bottom: 20px; width: 100%;">
             Espaço de Publicidade Ativo (Google AdSense)
@@ -125,7 +127,7 @@
             <button class="btn btn-net" onclick="pesquisarRedeEAtualizar()">Pesquisar Jogos da Semana</button>
         </div>
 
-        <!-- Estatísticas Rápidas do Topo (Preenche a tela de forma profissional) -->
+        <!-- Estatísticas Rápidas do Topo -->
         <div class="stats-top-grid">
             <div class="mini-card"><h4>Tendência Geral</h4><div class="val" style="color:var(--success);">Forte Otimização</div></div>
             <div class="mini-card"><h4>Chaves Rastreadas</h4><div class="val">14.820 Combinações</div></div>
@@ -133,26 +135,32 @@
             <div class="mini-card"><h4>Sincronização</h4><div id="top-sync-status" class="val">Pronto</div></div>
         </div>
 
-        <!-- Estrutura Principal de Duas Colunas Corrigida -->
+        <!-- Grelha Principal -->
         <div class="main-layout-grid">
             
-            <!-- COLUNA ESQUERDA: Histórico e Gráficos -->
+            <!-- COLUNA ESQUERDA -->
             <div class="panel-left">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
                     <h3>Histórico de Monitorização</h3>
                     <span id="sync-badge" style="font-size: 12px; color: var(--text-secondary);">Aguardando rede...</span>
                 </div>
                 
-                <div id="historico-content" class="game-card">
-                    <h4 style="font-size: 14px; margin-bottom: 5px; color: var(--accent);">Último Sorteio Base Rasteado:</h4>
+                <div class="game-card">
+                    <h4 style="font-size: 13px; color: var(--accent);">Último Euromilhões Rastreado:</h4>
                     <div class="ball-container">
                         <div class="ball">13</div><div class="ball">21</div><div class="ball">22</div><div class="ball">28</div><div class="ball">43</div>
                         <div class="ball star">1</div><div class="ball star">2</div>
                     </div>
-                    <p style="font-size: 12px; color: var(--success); font-weight: bold; margin-top: 5px;">Prémio Estimado: 45.000.000 €</p>
                 </div>
 
-                <h4 style="margin-top: 25px; font-size: 13px; text-transform: uppercase; color: var(--text-secondary);">Frequência dos Números (Top 10 Histórico)</h4>
-                <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px;">
-                    <div><span style="font-size:11px; color:var(--text-secondary);">Num 23</span><div style="background: var(--accent); height: 16px; width: 85%; border-radius: 4px; margin-top: 2px;"></div></div>
-                    <div><span style="font-size:11px; color:var(--text-secondary);">Num 44</span><div style="background: var(--accent); height: 16px; width: 72%; border-radius: 4px; margin-top: 2px;"></div></div>
+                <div class="game-card" style="margin-top: 12px;">
+                    <h4 style="font-size: 13px; color: var(--success);">Último Totoloto Rastreado:</h4>
+                    <div class="ball-container">
+                        <div class="ball">11</div><div class="ball">19</div><div class="ball">27</div><div class="ball">35</div><div class="ball">42</div>
+                        <div class="ball lucky">7</div>
+                    </div>
+                </div>
+
+                <!-- NOVO: RASTREIO DAS DUAS SEMANAS ANTERIORES -->
+                <div class="game-card" style="margin-top: 20px; background: rgba(59, 130, 246, 0.05); border-color: var(--accent);">
+                    <h3 style="font-size: 13px; color: var(--accent); margin-bottom: 8px;"><i class="fa-solid fa-history"></i> Números Extraídos das Semanas Anteriores</h3>
