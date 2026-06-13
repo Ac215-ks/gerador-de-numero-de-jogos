@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=device-width, initial-scale=1.0">
     <title>Claudio AI Analytics Premium</title>
-    <script src="https://jsdelivr.net"></script>
-    <link rel="stylesheet" href="https://cloudflare.com">
     
     <style>
         :root {
@@ -24,7 +22,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
         body { background-color: var(--bg-primary); color: var(--text-primary); display: flex; min-height: 100vh; position: relative; overflow-x: hidden; }
         
-        /* ROBÔ DE IA ANIMADO CORRIGIDO */
+        /* ROBÔ DE IA ANIMADO */
         .running-ai {
             position: fixed;
             bottom: 10px;
@@ -44,19 +42,29 @@
             100% { left: -50px; transform: scaleX(1); }
         }
 
+        /* Menu Lateral */
         .sidebar { width: var(--sidebar-width); background-color: var(--bg-secondary); padding: 20px; display: flex; flex-direction: column; gap: 12px; position: fixed; height: 100vh; }
         .logo { font-size: 24px; font-weight: bold; color: var(--accent); display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
         .nav-links { list-style: none; display: flex; flex-direction: column; gap: 6px; }
         .nav-links li { padding: 10px 14px; border-radius: 8px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 12px; color: var(--text-secondary); font-size: 14px; }
         .nav-links li:hover, .nav-links li.active { background-color: var(--accent); color: white; }
         
+        /* Conteúdo */
         .main-content { margin-left: var(--sidebar-width); flex: 1; padding: 30px; padding-bottom: 80px; }
         .header { margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
         
-        .euromilhoes-grid { display: grid; grid-template-columns: 1.3fr 1.2fr; gap: 25px; margin-top: 15px; }
+        /* Grelha de Estatísticas Rápidas do Topo */
+        .stats-top-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .mini-card { background: var(--bg-secondary); padding: 15px; border-radius: 10px; border: 1px solid #475569; }
+        .mini-card h4 { font-size: 11px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 5px; }
+        .mini-card .val { font-size: 18px; font-weight: bold; color: var(--accent); }
+
+        /* Grelha Principal Dividida */
+        .main-layout-grid { display: grid; grid-template-columns: 1.3fr 1.1fr; gap: 25px; }
         .panel-left { background-color: var(--bg-secondary); padding: 25px; border-radius: 12px; border: 1px solid #475569; }
-        .side-panel { background-color: var(--bg-secondary); padding: 25px; border-radius: 12px; border: 1px solid #475569; display: flex; flex-direction: column; gap: 15px; }
+        .panel-right { background-color: var(--bg-secondary); padding: 25px; border-radius: 12px; border: 1px solid #475569; display: flex; flex-direction: column; gap: 15px; }
         
+        /* Bolas e Elementos do Jogo */
         .ball-container { display: flex; gap: 6px; margin: 8px 0; flex-wrap: wrap; }
         .ball { background: #334155; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; border: 2px solid #475569; font-size: 13px; }
         .star { background: #eab308 !important; color: #0f172a !important; border-color: #ca8a04 !important; }
@@ -74,7 +82,6 @@
         .btn:hover { opacity: 0.9; transform: translateY(-1px); }
 
         .premium-locked-box { background: rgba(15, 23, 42, 0.6); border: 2px dashed var(--premium); border-radius: 8px; padding: 20px; text-align: center; margin-top: 10px; }
-        .premium-locked-box i { font-size: 28px; color: var(--premium); margin-bottom: 8px; }
 
         .ads-banner { background: #1e293b; border: 1px dashed #475569; border-radius: 8px; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
         .game-card { background: #0f172a; padding: 15px; border-radius: 12px; margin-top: 15px; border: 1px solid #334155; }
@@ -82,8 +89,6 @@
         .history-section { background-color: var(--bg-secondary); padding: 25px; border-radius: 12px; border: 1px solid #475569; margin-top: 25px; }
         .history-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #334155; font-size: 13px; }
         .history-item:last-child { border-bottom: none; }
-
-        /* LISTA DE ESTATÍSTICAS */
         .stats-list { list-style: none; margin-top: 10px; }
         .stats-list li { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #334155; font-size: 12px; }
         .stats-list li span:last-child { font-weight: bold; color: var(--warning); }
@@ -91,46 +96,51 @@
 </head>
 <body>
 
-    <!-- Pequeno Robô de IA a correr pelo fundo do ecrã -->
     <div class="running-ai">🤖💨</div>
 
-    <!-- Menu Lateral -->
     <div class="sidebar">
-        <div class="logo"><i class="fa-solid fa-brain"></i> Claudio AI</div>
+        <div class="logo">Claudio AI</div>
         <ul class="nav-links">
-            <li class="active"><i class="fa-solid fa-chart-pie"></i> Início</li>
-            <li><i class="fa-solid fa-clover"></i> Euromilhões</li>
-            <li><i class="fa-solid fa-circle-dot"></i> Totoloto</li>
-            <li><i class="fa-solid fa-moon"></i> EuroDreams</li>
-            <li><i class="fa-solid fa-money-bill-wave"></i> M1lhão</li>
+            <li class="active">[-] Início</li>
+            <li>[o] Euromilhões</li>
+            <li>[o] Totoloto</li>
+            <li>[o] EuroDreams</li>
+            <li>[o] M1lhão</li>
         </ul>
         <div class="ads-banner" style="height: 140px; margin-top: auto; background: #0f172a;">
-            <i class="fa-solid fa-rectangle-ad" style="margin-right:8px;"></i> Anúncio Google
+            Anúncio Google
         </div>
     </div>
 
-    <!-- Conteúdo Principal -->
     <div class="main-content">
-        
         <div class="ads-banner" style="height: 60px; margin-bottom: 20px; width: 100%;">
-            <i class="fa-solid fa-rectangle-ad" style="margin-right:8px;"></i> Espaço de Publicidade Ativo (Google AdSense)
+            Espaço de Publicidade Ativo (Google AdSense)
         </div>
 
         <div class="header">
             <div>
-                <h1 style="font-size: 24px;">Análise & Geração Multi-Jogos</h1>
-                <p style="font-size: 13px; color: var(--text-secondary);">Rastreio de dados e histórico de palpites guardado localmente.</p>
+                <h1 style="font-size: 24px;">Análise & Geração Otimizada</h1>
+                <p style="font-size: 13px; color: var(--text-secondary);">Rastreio inteligente e cruzamento estatístico em tempo real.</p>
             </div>
-            <button class="btn btn-net" onclick="pesquisarRedeEAtualizar()"><i class="fa-solid fa-globe"></i> Pesquisar Jogos da Semana</button>
+            <button class="btn btn-net" onclick="pesquisarRedeEAtualizar()">Pesquisar Jogos da Semana</button>
         </div>
 
-        <div class="euromilhoes-grid">
+        <!-- Estatísticas Rápidas do Topo (Preenche a tela de forma profissional) -->
+        <div class="stats-top-grid">
+            <div class="mini-card"><h4>Tendência Geral</h4><div class="val" style="color:var(--success);">Forte Otimização</div></div>
+            <div class="mini-card"><h4>Chaves Rastreadas</h4><div class="val">14.820 Combinações</div></div>
+            <div class="mini-card"><h4>Atraso Máximo</h4><div class="val" style="color:var(--warning);">Nº 33 (14 Semanas)</div></div>
+            <div class="mini-card"><h4>Sincronização</h4><div id="top-sync-status" class="val">Pronto</div></div>
+        </div>
+
+        <!-- Estrutura Principal de Duas Colunas Corrigida -->
+        <div class="main-layout-grid">
             
-            <!-- PAINEL ESQUERDO -->
+            <!-- COLUNA ESQUERDA: Histórico e Gráficos -->
             <div class="panel-left">
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <h3>Histórico de Monitorização</h3>
-                    <span id="sync-badge" style="font-size: 12px; color: var(--text-secondary);"><i class="fa-solid fa-circle-notch"></i> Aguardando rede...</span>
+                    <span id="sync-badge" style="font-size: 12px; color: var(--text-secondary);">Aguardando rede...</span>
                 </div>
                 
                 <div id="historico-content" class="game-card">
@@ -146,9 +156,3 @@
                 <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px;">
                     <div><span style="font-size:11px; color:var(--text-secondary);">Num 23</span><div style="background: var(--accent); height: 16px; width: 85%; border-radius: 4px; margin-top: 2px;"></div></div>
                     <div><span style="font-size:11px; color:var(--text-secondary);">Num 44</span><div style="background: var(--accent); height: 16px; width: 72%; border-radius: 4px; margin-top: 2px;"></div></div>
-                    <div><span style="font-size:11px; color:var(--text-secondary);">Num 19</span><div style="background: var(--accent); height: 16px; width: 65%; border-radius: 4px; margin-top: 2px;"></div></div>
-                </div>
-
-                <div class="ads-banner" style="height: 75px; margin-top: 25px; background: #0f172a;">
-                    <i class="fa-solid fa-rectangle-ad" style="margin-right:8px;"></i> Publicidade Inteligente Google
-                </div>
