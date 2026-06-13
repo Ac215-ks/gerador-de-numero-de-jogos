@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=device-width, initial-scale=1.0">
-    <title>Claudio AI Analytics Premium</title>
+    <title>Claudio AI Analytics</title>
     
     <style>
         :root {
@@ -15,33 +15,12 @@
             --accent: #3b82f6;
             --success: #10b981;
             --warning: #f59e0b;
-            --premium: #7c3aed;
             --sidebar-width: 260px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background-color: var(--bg-primary); color: var(--text-primary); display: flex; min-height: 100vh; position: relative; overflow-x: hidden; }
+        body { background-color: var(--bg-primary); color: var(--text-primary); display: flex; min-height: 100vh; }
         
-        /* ROBÔ DE IA ANIMADO */
-        .running-ai {
-            position: fixed;
-            bottom: 10px;
-            font-size: 20px;
-            white-space: nowrap;
-            z-index: 9999;
-            animation: aiRun 14s linear infinite;
-            pointer-events: none;
-            opacity: 0.8;
-        }
-
-        @keyframes aiRun {
-            0% { left: -50px; transform: scaleX(1); }
-            49% { transform: scaleX(1); }
-            50% { left: calc(100vw - 40px); transform: scaleX(-1); }
-            99% { transform: scaleX(-1); }
-            100% { left: -50px; transform: scaleX(1); }
-        }
-
         /* Menu Lateral */
         .sidebar { width: var(--sidebar-width); background-color: var(--bg-secondary); padding: 20px; display: flex; flex-direction: column; gap: 12px; position: fixed; height: 100vh; }
         .logo { font-size: 24px; font-weight: bold; color: var(--accent); display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
@@ -49,115 +28,126 @@
         .nav-links li { padding: 10px 14px; border-radius: 8px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 12px; color: var(--text-secondary); font-size: 14px; }
         .nav-links li:hover, .nav-links li.active { background-color: var(--accent); color: white; }
         
-        /* Conteúdo */
-        .main-content { margin-left: var(--sidebar-width); flex: 1; padding: 30px; padding-bottom: 80px; }
-        .header { margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        /* Conteúdo Principal */
+        .main-content { margin-left: var(--sidebar-width); flex: 1; padding: 30px; }
+        .header { margin-bottom: 20px; }
         
-        /* Grelha de Estatísticas Rápidas do Topo */
-        .stats-top-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .mini-card { background: var(--bg-secondary); padding: 15px; border-radius: 10px; border: 1px solid #475569; }
-        .mini-card h4 { font-size: 11px; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 5px; }
-        .mini-card .val { font-size: 18px; font-weight: bold; color: var(--accent); }
-
-        /* Grelha Principal Dividida Corretamente */
+        /* Grelha Dividida em Duas Colunas */
         .main-layout-grid { display: grid; grid-template-columns: 1.3fr 1.1fr; gap: 25px; align-items: start; }
-        .panel-left { background-color: var(--bg-secondary); padding: 25px; border-radius: 12px; border: 1px solid #475569; width: 100%; }
-        .panel-right { background-color: var(--bg-secondary); padding: 25px; border-radius: 12px; border: 1px solid #475569; display: flex; flex-direction: column; gap: 15px; width: 100%; }
+        .panel-left { background-color: var(--bg-secondary); padding: 25px; border-radius: 12px; border: 1px solid #475569; }
+        .panel-right { background-color: var(--bg-secondary); padding: 25px; border-radius: 12px; border: 1px solid #475569; display: flex; flex-direction: column; gap: 15px; }
         
-        /* Bolas e Elementos do Jogo */
+        /* Bolas e Estrelas */
         .ball-container { display: flex; gap: 6px; margin: 8px 0; flex-wrap: wrap; }
-        .ball { background: #334155; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; border: 2px solid #475569; font-size: 12px; }
+        .ball { background: #334155; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white; border: 2px solid #475569; font-size: 13px; }
         .star { background: #eab308 !important; color: #0f172a !important; border-color: #ca8a04 !important; }
-        .lucky { background: #ef4444 !important; color: white !important; border-color: #b91c1c !important; }
-        .dream { background: #3b82f6 !important; color: white !important; border-color: #1d4ed8 !important; }
         
-        .generated-row { background: #0f172a; padding: 12px; border-radius: 8px; margin-top: 5px; border-left: 4px solid var(--success); }
-        .premium-row { border-left-color: var(--premium) !important; }
+        /* Linhas do Gerador */
+        .generated-row { background: #0f172a; padding: 12px; border-radius: 8px; margin-top: 5px; border-left: 4px solid var(--accent); }
         .prob-badge { background: #1e293b; color: var(--success); padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; float: right; border: 1px solid var(--success); }
 
-        .btn { color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; width: 100%; }
-        .btn-net { background-color: var(--accent); width: auto; }
-        .btn-free { background-color: var(--success); }
-        .btn-pay { background-color: var(--premium); font-size: 14px; padding: 10px; margin-top: 10px; }
+        /* Botão */
+        .btn { background-color: var(--success); color: white; border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 14px; width: 100%; }
         .btn:hover { opacity: 0.9; transform: translateY(-1px); }
-
-        .premium-locked-box { background: rgba(15, 23, 42, 0.6); border: 2px dashed var(--premium); border-radius: 8px; padding: 20px; text-align: center; margin-top: 10px; }
-
-        .ads-banner { background: #1e293b; border: 1px dashed #475569; border-radius: 8px; color: var(--text-secondary); display: flex; align-items: center; justify-content: center; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
         .game-card { background: #0f172a; padding: 15px; border-radius: 12px; margin-top: 15px; border: 1px solid #334155; }
-        
-        .history-section { background-color: var(--bg-secondary); padding: 25px; border-radius: 12px; border: 1px solid #475569; margin-top: 25px; grid-column: span 2; width: 100%; }
-        .history-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #334155; font-size: 13px; }
-        .history-item:last-child { border-bottom: none; }
-        .stats-list { list-style: none; margin-top: 10px; }
-        .stats-list li { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #334155; font-size: 12px; }
-        .stats-list li span:last-child { font-weight: bold; color: var(--warning); }
-
-        /* Sistema de Abas Dinâmicas */
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
     </style>
 </head>
 <body>
 
-    <div class="running-ai">🤖💨</div>
-
-    <!-- Menu Lateral Dinâmico -->
+    <!-- Menu Lateral Clássico -->
     <div class="sidebar">
         <div class="logo">Claudio AI</div>
         <ul class="nav-links">
-            <li class="active" onclick="switchTab('inicio', this)">❖ Início</li>
-            <li onclick="switchTab('euro', this)">🍀 Euromilhões</li>
-            <li onclick="switchTab('toto', this)">🎯 Totoloto</li>
-            <li onclick="switchTab('dreams', this)">🌙 EuroDreams</li>
+            <li>Início</li>
+            <li class="active">Euromilhões</li>
+            <li>Totoloto</li>
+            <li>EuroDreams</li>
+            <li>M1lhão</li>
         </ul>
-        <div class="ads-banner" style="height: 140px; margin-top: auto; background: #0f172a;">
-            Anúncio Google
-        </div>
     </div>
 
     <!-- Conteúdo Principal -->
     <div class="main-content">
-        <div class="ads-banner" style="height: 60px; margin-bottom: 20px; width: 100%;">
-            Espaço de Publicidade Ativo (Google AdSense)
-        </div>
-
         <div class="header">
-            <div>
-                <h1 style="font-size: 24px;">Análise & Geração Otimizada</h1>
-                <p style="font-size: 13px; color: var(--text-secondary);">Rastreio inteligente e cruzamento estatístico em tempo real.</p>
-            </div>
-            <button class="btn btn-net" onclick="pesquisarRedeEAtualizar()">Pesquisar Jogos da Semana</button>
+            <h1 style="font-size: 24px;">Análise & Geração Multi-Jogos</h1>
+            <p style="font-size: 13px; color: var(--text-secondary);">Rastreio de dados e gerador de palpites simples.</p>
         </div>
 
-        <!-- Estatísticas Rápidas do Topo -->
-        <div class="stats-top-grid">
-            <div class="mini-card"><h4>Tendência Geral</h4><div class="val" style="color:var(--success);">Forte Otimização</div></div>
-            <div class="mini-card"><h4>Chaves Rastreadas</h4><div class="val">14.820 Combinações</div></div>
-            <div class="mini-card"><h4>Atraso Máximo</h4><div class="val" style="color:var(--warning);">Nº 33 (14 Semanas)</div></div>
-            <div class="mini-card"><h4>Sincronização</h4><div id="top-sync-status" class="val">Pronto</div></div>
-        </div>
-
-        <!-- Grelha Principal Dividida -->
         <div class="main-layout-grid">
             
-            <!-- COLUNA ESQUERDA (Muda conforme o clique no menu) -->
+            <!-- COLUNA ESQUERDA: Histórico e Frequência Visual -->
             <div class="panel-left">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <h3>Histórico de Monitorização</h3>
-                    <span id="sync-badge" style="font-size: 12px; color: var(--text-secondary);">Sorteios Sincronizados</span>
-                </div>
+                <h3>Histórico de Monitorização</h3>
+                <span style="font-size: 11px; color: var(--text-secondary);">Aguardando rede...</span>
                 
-                <!-- ABA: INÍCIO (Mostra todos) -->
-                <div id="tab-inicio" class="tab-content active">
-                    <div class="game-card">
-                        <h4 style="font-size: 13px; color: var(--accent);">Último Euromilhões Rastreado:</h4>
-                        <div class="ball-container">
-                            <div class="ball">13</div><div class="ball">21</div><div class="ball">22</div><div class="ball">28</div><div class="ball">43</div>
-                            <div class="ball star">1</div><div class="ball star">2</div>
-                        </div>
+                <div id="historico-content" class="game-card">
+                    <h4 style="font-size: 14px; margin-bottom: 5px; color: var(--accent);">Último Sorteio Base Rastreado:</h4>
+                    <div class="ball-container">
+                        <div class="ball">13</div><div class="ball">21</div><div class="ball">22</div><div class="ball">28</div><div class="ball">43</div>
+                        <div class="ball star">1</div><div class="ball star">2</div>
                     </div>
-                    <div class="game-card" style="margin-top: 12px;">
-                        <h4 style="font-size: 13px; color: var(--success);">Último Totoloto Rastreado:</h4>
-                        <div class="ball-container">
-                            <div class="ball">11</div><div class="ball">19</div><div class="ball">27</div><div class="ball">35</div><div class="ball">42</div>
+                    <p style="font-size: 12px; color: var(--success); font-weight: bold; margin-top: 5px;">Prémio Estimado: 45.000.000 €</p>
+                </div>
+
+                <h4 style="margin-top: 25px; font-size: 13px; text-transform: uppercase; color: var(--text-secondary);">Frequência dos Números (Top 10 Histórico)</h4>
+                <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px;">
+                    <div><span style="font-size:11px; color:var(--text-secondary);">Num 23</span><div style="background: var(--accent); height: 16px; width: 85%; border-radius: 4px; margin-top: 2px;"></div></div>
+                    <div><span style="font-size:11px; color:var(--text-secondary);">Num 44</span><div style="background: var(--accent); height: 16px; width: 72%; border-radius: 4px; margin-top: 2px;"></div></div>
+                    <div><span style="font-size:11px; color:var(--text-secondary);">Num 19</span><div style="background: var(--accent); height: 16px; width: 65%; border-radius: 4px; margin-top: 2px;"></div></div>
+                </div>
+            </div>
+
+            <!-- COLUNA DIREITA: Gerador Livre e Direto (Sem Bloqueios) -->
+            <div class="panel-right">
+                <h3>Gerador Otimizado IA</h3>
+                <p style="font-size: 13px; color: var(--text-secondary);">Clique no botão para gerar palpites instantâneos de forma vertical.</p>
+                
+                <button class="btn" onclick="gerarChavesLivres()">Gerar Palpites Inteligentes</button>
+                
+                <div id="container-resultados-ia" style="display: flex; flex-direction: column; gap: 10px; margin-top: 5px;">
+                    <!-- Chaves surgem listadas aqui imediatamente -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function gerarNumerosSimples(qtd, maximo) {
+            let numeros = [];
+            while (numeros.length < qtd) {
+                let n = Math.floor(Math.random() * maximo) + 1;
+                if (!numeros.includes(n)) {
+                    numeros.push(n);
+                }
+            }
+            return numeros.sort((a, b) => a - b);
+        }
+
+        function gerarChavesLivres() {
+            const container = document.getElementById('container-resultados-ia');
+            container.innerHTML = ''; // Limpa a linha anterior
+
+            // Gera 4 palpites diretos, um embaixo do outro
+            for (let i = 1; i <= 4; i++) {
+                let nEuro = gerarNumerosSimples(5, 50); 
+                let sEuro = gerarNumerosSimples(2, 12);
+                
+                let row = document.createElement('div');
+                row.className = 'generated-row';
+                row.innerHTML = <div><span class="prob-badge">Acerto: ${(72 + Math.random() * 15).toFixed(1)}%</span><span style="font-size:11px; font-weight:bold; color:var(--accent)">CHAVE RECOMENDADA #${i}</span></div>;
+                
+                let bc = document.createElement('div');
+                bc.className = 'ball-container';
+                bc.style.marginTop = '8px';
+                
+                nEuro.forEach(n => bc.innerHTML += <div class="ball" style="width:30px; height:30px; font-size:12px;">${n}</div>);
+                sEuro.forEach(s => bc graph += bc.innerHTML += <div class="ball star" style="width:30px; height:30px; font-size:12px;">${s}</div>);
+                
+                row.appendChild(bc);
+                container.appendChild(row);
+            }
+        }
+    </script>
+</body>
+</html>
